@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerViewAdapter.ViewHolder> {
 
     final private static String TAG = "RecyclerViewAdapter";
+    private Context mContext;
     private String[] mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    MyRecyclerViewAdapter(Context context, String[] data) {
+    GridRecyclerViewAdapter(Context context, String[] data) {
+        this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
@@ -29,7 +31,7 @@ public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerVi
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View view = mInflater.inflate(R.layout.grid_cell, parent, false);
         return new ViewHolder(view);
     }
 
@@ -52,7 +54,7 @@ public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerVi
 
         ViewHolder(View itemView) {
             super(itemView);
-            myTextView = itemView.findViewById(R.id.info_text);
+            myTextView = itemView.findViewById(R.id.LetterView);
             itemView.setOnClickListener(this);
         }
 
