@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by Luke Slevinsky on 2019-05-12.
+ * Created by Luke Slevinsky on 2019-05-13.
  */
-public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerViewAdapter.ViewHolder> {
+public class WordListRecyclerViewAdapter extends RecyclerView.Adapter<WordListRecyclerViewAdapter.ViewHolder>{
 
     final private static String TAG = "GridRecyclerViewAdapter";
     private Context mContext;
-    private char[] mData;
+    private String[] mData;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    GridRecyclerViewAdapter(Context context, char[] data) {
+    WordListRecyclerViewAdapter(Context context, String[] data) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
@@ -30,14 +30,14 @@ public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerVi
     // inflates the cell layout from xml when needed
     @Override
     @NonNull
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WordListRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.grid_cell, parent, false);
-        return new ViewHolder(view);
+        return new WordListRecyclerViewAdapter.ViewHolder(view);
     }
 
     // binds the data to the TextView in each cell
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WordListRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.myTextView.setText(String.valueOf(mData[position]));
     }
 
@@ -65,12 +65,12 @@ public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerVi
     }
 
     // convenience method for getting data at click position
-    char getItem(int id) {
+    String getItem(int id) {
         return mData[id];
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    void setClickListener(WordListRecyclerViewAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 
