@@ -7,18 +7,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class WordSearchActivity extends AppCompatActivity {
+    final public static String TAG = "WordSearchActivity";
+    final public static String FINISH_TIME = "finish_time";
 //    private String[] grid;
     private Context mContext;
     private WordListRecyclerViewAdapter listAdapter;
@@ -27,8 +33,8 @@ public class WordSearchActivity extends AppCompatActivity {
     private RecyclerView wordList;
     private TextView timerView;
     private TextView scoreView;
-
-    private int score = 0;
+    private MaterialButton checkWordButton;
+    private List<String> words;
 
     final int MSG_START_TIMER = 0;
     final int MSG_STOP_TIMER = 1;
@@ -71,6 +77,7 @@ public class WordSearchActivity extends AppCompatActivity {
         timerView = findViewById(R.id.timeLabel);
         scoreView = findViewById(R.id.scoreLabel);
         mContext = getApplicationContext();
+        checkWordButton = findViewById(R.id.CheckWord);
 
         char[] grid = {
                 'a','b','c','d','e','f','g','h','i','j',
@@ -84,40 +91,57 @@ public class WordSearchActivity extends AppCompatActivity {
                 'a','b','c','d','e','f','g','h','i','j',
                 'a','b','c','d','e','f','g','h','i','j'
         };
+        checkWordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: chars "+GameBoard.getInstance().getSelectedChars().toString());
+                GameBoard gameBoard = GameBoard.getInstance();
+                String res = gameBoard.validWord();
+                Log.d(TAG, "onClick: ->"+res);
+                if (!res.isEmpty()) {
+                    updateScore(gameBoard.incrScore());
+                    gameBoard.clearSelectedChars();
+                    if (gameBoard.getScore() == gameBoard.getMaxScore()) {
+                        Intent intent = new Intent(mContext, EndGame.class);
+                        String endTime = String.format("%02d:%02d",timer.getElapsedTimeMin(),timer.getElapsedTimeSecs()%60);
+                        intent.putExtra(FINISH_TIME,endTime);
+                        startActivity(intent);
+                    }
+                } else {
+                    gameBoard.resetSelections();
+                    gridAdapter.notifyDataSetChanged();
+                }
+            }
+        });
 
 
-        List<String> words = Arrays.asList("Swift", "Kotlin", "ObjectiveC", "Variable", "Java", "Mobile");
+        words = Arrays.asList("Swift", "Kotlin", "ObjectiveC", "Variable", "Java", "Mobile");
+        GameBoard.getInstance().setWords(words);
 
-        scoreView.setText(String.format("%d/%d",score,words.size()));
+        updateScore(GameBoard.getInstance().getScore());
         mHandler.sendEmptyMessage(MSG_START_TIMER);
         GridGenerator g = new GridGenerator();
 
         Toast.makeText(mContext,String.format("we used %d",g.setGrid(words,grid).size()),Toast.LENGTH_SHORT).show();
 
         // set up the RecyclerViews
+        final int num_cols = 10;
         wordGrid = findViewById(R.id.WordGrid);
         gridAdapter = new GridRecyclerViewAdapter(mContext, grid);
-        gridAdapter.setClickListener(new GridRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(mContext,"You clicked on " + gridAdapter.getItem(position),Toast.LENGTH_SHORT).show();
-            }
-        });
 
         wordGrid.setAdapter(gridAdapter);
-        wordGrid.setLayoutManager(new GridLayoutManager(mContext, 10));
+        wordGrid.setLayoutManager(new GridLayoutManager(mContext, num_cols));
 
         wordList = findViewById(R.id.WordList);
         listAdapter = new WordListRecyclerViewAdapter(mContext,(String[])words.toArray());
-        listAdapter.setClickListener(new WordListRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(mContext,"You clicked on " + listAdapter.getItem(position),Toast.LENGTH_SHORT).show();
-            }
-        });
 
         wordList.setAdapter(listAdapter);
         wordList.setLayoutManager(new GridLayoutManager(mContext, 4));
+    }
+
+
+    public void updateScore(int score) {
+        scoreView.setText(String.format("%d/%d",score,words.size()));
     }
 
 }

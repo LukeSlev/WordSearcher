@@ -20,12 +20,12 @@ public class GridGenerator {
         clearGrid(grid);
         for (String w : dataInput) {
             String word = w.toLowerCase();
-            if (word.contains("objectivec")) Log.d(TAG, "setGrid: HIII");
+
             if (tryPlaceWord(word, grid)) {
                 usedStrings.add(word);
             }
         }
-        randomizeNullGrid(grid);
+//        randomizeNullGrid(grid);
         return usedStrings;
     }
 
@@ -103,7 +103,7 @@ public class GridGenerator {
         if (dir == Direction.DOWN_LEFT && ((col - len) < 0 || (row + len) >= rowLen)) return false;
         if (dir == Direction.UP_RIGHT && ((col + len) >= rowLen || (row - len) < 0)) return false;
 
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i <= len; i++) {
             if (gridArr[row*rowLen+col] != '\0' && gridArr[row*rowLen+col] != word.charAt(i))
                 return false;
             col += dir.x;
