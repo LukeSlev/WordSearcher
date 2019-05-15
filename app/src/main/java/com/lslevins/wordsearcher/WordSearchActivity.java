@@ -110,10 +110,9 @@ public class WordSearchActivity extends AppCompatActivity {
                         intent.putExtra(FINISH_TIME,endTime);
                         startActivity(intent);
                     }
-                } else {
-                    gameBoard.resetSelections();
-                    gridAdapter.notifyDataSetChanged();
                 }
+                gameBoard.resetSelections();
+                gridAdapter.notifyDataSetChanged();
             }
         });
 
