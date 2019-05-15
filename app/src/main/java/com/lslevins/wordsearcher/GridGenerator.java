@@ -25,7 +25,7 @@ public class GridGenerator {
                 usedStrings.add(word);
             }
         }
-//        randomizeNullGrid(grid);
+        randomizeNullGrid(grid);
         return usedStrings;
     }
 

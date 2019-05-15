@@ -30,6 +30,9 @@ public class EndGame extends AppCompatActivity {
         restartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GameBoard.getInstance().setScore(0);
+                GameBoard.getInstance().resetSelections();
+                GameBoard.getInstance().clearSelectedChars();
                 Intent intent = new Intent(mContext, MainActivity.class);
                 startActivity(intent);
             }

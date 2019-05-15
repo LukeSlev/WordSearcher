@@ -2,6 +2,7 @@ package com.lslevins.wordsearcher;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class GridRecyclerViewAdapter extends RecyclerView.Adapter<GridRecyclerVi
                 boolean[] selected = GameBoard.getInstance().getSelectedCells();
                 if (selected[position]) {
                     int idx = GameBoard.getInstance().getSelectedChars().indexOf(""+mData[position]);
+                    Log.d(TAG, "onClick: idx "+idx);
                     if (idx == 0 || idx == GameBoard.getInstance().getSelectedLength()-1) {
                         GameBoard.getInstance().getSelectedChars().deleteCharAt(idx);
                         selected[position] = !selected[position];

@@ -1,6 +1,8 @@
 package com.lslevins.wordsearcher;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +41,13 @@ public class WordListRecyclerViewAdapter extends RecyclerView.Adapter<WordListRe
     @Override
     public void onBindViewHolder(@NonNull WordListRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.myTextView.setText(String.valueOf(mData[position]));
+
+        if (GameBoard.getInstance().getFoundWords()[position]) {
+            holder.myTextView.setBackgroundColor(Color.GREEN);
+
+        } else {
+            holder.myTextView.setBackgroundColor(mContext.getResources().getColor(R.color.lighter_grey));
+        }
     }
 
     // total number of cells
@@ -67,6 +76,16 @@ public class WordListRecyclerViewAdapter extends RecyclerView.Adapter<WordListRe
     // convenience method for getting data at click position
     String getItem(int id) {
         return mData[id];
+    }
+
+
+    int indexOf(String word) {
+        for (int i=0; i<getItemCount();i++) {
+            if (word.compareTo(mData[i].toLowerCase()) == 0) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     // allows clicks events to be caught

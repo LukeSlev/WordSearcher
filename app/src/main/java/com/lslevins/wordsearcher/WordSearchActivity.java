@@ -100,10 +100,13 @@ public class WordSearchActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: ->"+res);
                 if (!res.isEmpty()) {
                     updateScore(gameBoard.incrScore());
+
                     gameBoard.clearSelectedChars();
+                    updateWordList(res);
+                    //Game Over
                     if (gameBoard.getScore() == gameBoard.getMaxScore()) {
                         Intent intent = new Intent(mContext, EndGame.class);
-                        String endTime = String.format("%02d:%02d",timer.getElapsedTimeMin(),timer.getElapsedTimeSecs()%60);
+                        String endTime = String.format("%02d:%02ds",timer.getElapsedTimeMin(),timer.getElapsedTimeSecs()%60);
                         intent.putExtra(FINISH_TIME,endTime);
                         startActivity(intent);
                     }
@@ -137,6 +140,15 @@ public class WordSearchActivity extends AppCompatActivity {
 
         wordList.setAdapter(listAdapter);
         wordList.setLayoutManager(new GridLayoutManager(mContext, 4));
+    }
+
+    private void updateWordList(String res) {
+        int idx = listAdapter.indexOf(res);
+        Log.d(TAG, "updateWordList: idx of upd "+idx);
+        if (idx >= 0) {
+            GameBoard.getInstance().getFoundWords()[idx] = true;
+            listAdapter.notifyDataSetChanged();
+        }
     }
 
 

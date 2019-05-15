@@ -12,10 +12,10 @@ public class GameBoard {
     final public static String TAG = "GameBoard";
     private static final GameBoard ourInstance = new GameBoard();
     private List<String> words = new ArrayList<String>();
+    private boolean[] foundWords;
     private StringBuilder selectedChars = new StringBuilder();
     private boolean[] selectedCells;
 
-    int lastIdx;
     int score = 0;
     int maxScore;
 
@@ -24,14 +24,6 @@ public class GameBoard {
     }
 
     private GameBoard() {
-    }
-
-    public int getLastIdx() {
-        return lastIdx;
-    }
-
-    public void setLastIdx(int lastIdx) {
-        this.lastIdx = lastIdx;
     }
 
     public int getScore() {
@@ -60,7 +52,9 @@ public class GameBoard {
 
     public void setWords(List<String> words) {
         this.words = words;
-        setMaxScore(words.size());
+        int size = words.size();
+        setMaxScore(size);
+        this.foundWords = new boolean[words.size()];
     }
 
     public StringBuilder getSelectedChars() {
@@ -69,6 +63,14 @@ public class GameBoard {
 
     public void setSelectedChars(StringBuilder selected) {
         this.selectedChars = selected;
+    }
+
+    public boolean[] getFoundWords() {
+        return foundWords;
+    }
+
+    public void setFoundWords(boolean[] foundWords) {
+        this.foundWords = foundWords;
     }
 
     public int getSelectedLength(){
